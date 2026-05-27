@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midas Real-time Asset Tracker</title>
     <!-- Tailwind CSS -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
-    <script src="[https://cdn.jsdelivr.net/npm/chart.js](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
-    <script src="[https://unpkg.com/lucide@latest](https://unpkg.com/lucide@latest)"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('[https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Noto+Sans+KR:wght=300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Noto+Sans+KR:wght=300;400;500;700&display=swap)');
-        body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Noto+Sans+KR:wght=300;400;500;700&display=swap');
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen pb-12">
@@ -43,9 +41,9 @@
     <main class="max-w-5xl mx-auto px-4 mt-6 space-y-6">
 
         <!-- Status Toast -->
-        <div id="status-toast" class="hidden flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-200 rounded-lg bg-blue-50" role="alert">
+        <div id="status-toast" class="hidden flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-200 rounded-lg bg-blue-50">
             <i data-lucide="info" class="flex-shrink-0 inline w-4 h-4 mr-3 animate-pulse"></i>
-            <div id="status-toast-text" class="font-medium">구글 검색을 통해 실시간 시세 및 환율 정보를 수집 중입니다... (약 3~5초 소요)</div>
+            <div id="status-toast-text" class="font-medium">실시간 시세 및 환율 정보를 수집 중입니다... (약 3~5초 소요)</div>
         </div>
 
         <!-- Dashboard Summary -->
@@ -90,14 +88,14 @@
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-semibold text-slate-600 flex items-center"><span class="mr-1">🇰🇷</span> 원화 현금</span>
                         <div class="flex items-center space-x-1">
-                            <input type="number" id="cash-krw-input" onchange="updateCash()" class="w-28 text-right px-1.5 py-0.5 text-xs border rounded font-medium focus:ring-1 focus:ring-indigo-500 focus:outline-none" placeholder="0">
+                            <input type="number" id="cash-krw-input" class="w-28 text-right px-1.5 py-0.5 text-xs border rounded font-medium focus:ring-1 focus:ring-indigo-500" placeholder="0">
                             <span class="text-xs text-slate-400">원</span>
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-semibold text-slate-600 flex items-center"><span class="mr-1">🇺🇸</span> 달러 현금</span>
                         <div class="flex items-center space-x-1">
-                            <input type="number" id="cash-usd-input" onchange="updateCash()" class="w-28 text-right px-1.5 py-0.5 text-xs border rounded font-medium focus:ring-1 focus:ring-indigo-500 focus:outline-none" placeholder="0">
+                            <input type="number" id="cash-usd-input" class="w-28 text-right px-1.5 py-0.5 text-xs border rounded font-medium focus:ring-1 focus:ring-indigo-500" placeholder="0">
                             <span class="text-xs text-slate-400">$</span>
                         </div>
                     </div>
@@ -128,14 +126,12 @@
             </div>
         </div>
 
-        <!-- Portfolio Assets Control List -->
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden" id="holdings-section">
+        <!-- Stock Control List -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
             <div class="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h3 class="text-lg font-bold text-slate-900">보유 주식 목록 (Stocks)</h3>
-                </div>
+                <h3 class="text-lg font-bold text-slate-900">보유 주식 목록 (Stocks)</h3>
                 <form id="quick-add-form" class="flex flex-wrap items-center gap-2">
-                    <input type="text" id="add-ticker" placeholder="예: 현대차, TSLA, 삼성전자" class="px-3 py-2 text-sm border border-slate-200 rounded-lg w-full sm:w-44 focus:ring-1 focus:ring-indigo-500 focus:outline-none" required>
+                    <input type="text" id="add-ticker" placeholder="예: 현대차, TSLA, NVDA" class="px-3 py-2 text-sm border border-slate-200 rounded-lg w-full sm:w-44 focus:ring-1 focus:ring-indigo-500 focus:outline-none" required>
                     <input type="number" id="add-qty" placeholder="수량" class="px-3 py-2 text-sm border border-slate-200 rounded-lg w-24 focus:ring-1 focus:ring-indigo-500 focus:outline-none" step="any" required>
                     <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg flex items-center space-x-1 whitespace-nowrap">
                         <i data-lucide="plus" class="w-4 h-4"></i>
@@ -158,39 +154,26 @@
                     <tbody id="holdings-list" class="divide-y divide-slate-100 text-sm"></tbody>
                 </table>
             </div>
-            <div id="empty-holdings" class="p-12 text-center hidden">보유 주식이 없습니다. 상단에서 종목을 추가해 보세요!</div>
+            <div id="empty-holdings" class="p-12 text-center text-slate-400 hidden">보유 주식이 없습니다. 우측 상단에서 종목을 추가해 보세요!</div>
         </div>
-
     </main>
 
-    <!-- Custom Modal for Alerts -->
+    <!-- Custom Modal -->
     <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300" id="modal-box">
             <div class="p-6">
                 <div class="flex items-center space-x-3 text-amber-600 mb-3" id="modal-header-icon"></div>
                 <p class="text-sm text-slate-600 leading-relaxed" id="modal-message"></p>
             </div>
-            <div class="bg-slate-50 px-6 py-4 flex justify-end space-x-2 border-t border-slate-100">
+            <div class="bg-slate-50 px-6 py-4 flex justify-end border-t border-slate-100">
                 <button id="modal-close-btn" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-sm font-semibold">확인</button>
             </div>
         </div>
     </div>
 
     <script>
-        const apiKey = ""; // Runtime automatically provisions key
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'financial-asset-tracker';
-
-        let portfolio = {
-            usd_krw: 1350.00,
-            cash_krw: 0,
-            cash_usd: 0,
-            assets: [],
-            history: []
-        };
-
-        let trendChartInstance = null;
-        let pieChartInstance = null;
-        let isSyncing = false;
+        let portfolio = { usd_krw: 1350.00, cash_krw: 0, cash_usd: 0, assets: [], history: [] };
+        let trendChartInstance = null; let pieChartInstance = null; let isSyncing = false;
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -198,29 +181,24 @@
             
             if (portfolio.history.length === 0) {
                 portfolio.history = [
-                    { date: getPastDateString(4), total_krw: 685000000 },
-                    { date: getPastDateString(3), total_krw: 692000000 },
-                    { date: getPastDateString(2), total_krw: 698000000 },
-                    { date: getPastDateString(1), total_krw: 701000000 }
+                    { date: getPastDate(4), total_krw: 50000000 },
+                    { date: getPastDate(3), total_krw: 52000000 },
+                    { date: getPastDate(2), total_krw: 51500000 },
+                    { date: getPastDate(1), total_krw: 53000000 }
                 ];
                 savePortfolio();
             }
 
-            // Sync inputs with state
             document.getElementById('cash-krw-input').value = portfolio.cash_krw || 0;
             document.getElementById('cash-usd-input').value = portfolio.cash_usd || 0;
 
             renderAll();
+            fetchBackupExchangeRate().then(() => { renderAll(); });
 
-            // 백업용 오픈 API 환율 먼저 호출 (환율 절대 안 끊기게 보장)
-            fetchBackupExchangeRate().then(() => {
-                renderAll();
-                // 그 다음 실시간 주식 시세 자동 동기화
-                setTimeout(() => { syncAllPricesAndRates(true); }, 500);
-            });
-
+            document.getElementById('cash-krw-input').addEventListener('input', updateCash);
+            document.getElementById('cash-usd-input').addEventListener('input', updateCash);
             document.getElementById('quick-add-form').addEventListener('submit', handleAddAsset);
-            document.getElementById('sync-all-btn').addEventListener('click', () => syncAllPricesAndRates(false));
+            document.getElementById('sync-all-btn').addEventListener('click', () => syncPrices());
             document.getElementById('edit-rate-btn').addEventListener('click', toggleRateEdit);
             document.getElementById('cancel-rate-btn').addEventListener('click', toggleRateEdit);
             document.getElementById('save-rate-btn').addEventListener('click', saveManualRate);
@@ -228,383 +206,125 @@
             document.getElementById('modal-close-btn').addEventListener('click', hideModal);
         });
 
-        function getPastDateString(daysAgo) {
-            const date = new Date();
-            date.setDate(date.getDate() - daysAgo);
-            return date.toISOString().split('T')[0];
+        function getPastDate(daysAgo) {
+            const d = new Date(); d.setDate(d.getDate() - daysAgo); return d.toISOString().split('T')[0];
         }
-
-        function savePortfolio() {
-            localStorage.setItem('midas_portfolio_data', JSON.stringify(portfolio));
-        }
-
+        function savePortfolio() { localStorage.setItem('midas_portfolio_data_v2', JSON.stringify(portfolio)); }
         function loadPortfolio() {
-            const saved = localStorage.getItem('midas_portfolio_data');
-            if (saved) {
-                try {
-                    portfolio = JSON.parse(saved);
-                    if(portfolio.cash_krw === undefined) portfolio.cash_krw = 0;
-                    if(portfolio.cash_usd === undefined) portfolio.cash_usd = 0;
-                } catch (e) { console.error(e); }
-            }
+            const saved = localStorage.getItem('midas_portfolio_data_v2');
+            if (saved) { try { portfolio = JSON.parse(saved); } catch(e){} }
         }
-
-        // 백업용 공공 오픈 환율 API (인증 불필요, 100% 보장용)
         async function fetchBackupExchangeRate() {
             try {
-                const res = await fetch('[https://open.er-api.com/v6/latest/USD](https://open.er-api.com/v6/latest/USD)');
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
                 if (res.ok) {
                     const data = await res.json();
-                    const rate = data.rates?.KRW;
-                    if (rate && rate > 900 && rate < 2000) {
-                        portfolio.usd_krw = rate;
+                    if (data.rates?.KRW) {
+                        portfolio.usd_krw = data.rates.KRW;
                         document.getElementById('rate-badge').textContent = "실시간 자동";
                         document.getElementById('rate-badge').className = "px-2 py-0.5 text-[10px] bg-emerald-50 text-emerald-700 rounded-full font-bold";
                         savePortfolio();
                     }
                 }
-            } catch (e) {
-                console.error("백업 환율 호출 실패:", e);
-            }
+            } catch (e) {}
         }
-
         function updateCash() {
             portfolio.cash_krw = parseFloat(document.getElementById('cash-krw-input').value) || 0;
             portfolio.cash_usd = parseFloat(document.getElementById('cash-usd-input').value) || 0;
-            savePortfolio();
-            renderAll();
+            savePortfolio(); renderSummary(); renderCharts();
         }
-
-        function renderAll() {
-            renderSummary();
-            renderHoldings();
-            renderCharts();
-            lucide.createIcons();
-        }
-
-        // 총자산 계산기 (0원 주식은 배제하고 정확한 합계 산출)
+        function renderAll() { renderSummary(); renderHoldings(); renderCharts(); lucide.createIcons(); }
         function renderSummary() {
             let totalKRW = portfolio.cash_krw + (portfolio.cash_usd * portfolio.usd_krw);
-            portfolio.assets.forEach(asset => {
-                const val = asset.qty * (asset.price || 0);
-                totalKRW += asset.currency === 'USD' ? val * portfolio.usd_krw : val;
+            portfolio.assets.forEach(a => {
+                let v = a.qty * (a.price || 0);
+                totalKRW += a.currency === 'USD' ? v * portfolio.usd_krw : v;
             });
-
             document.getElementById('total-asset-krw').textContent = formatKoreanCurrency(totalKRW);
-            document.getElementById('display-usd-krw').textContent = `₩${portfolio.usd_krw.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('display-usd-krw').textContent = `₩${portfolio.usd_krw.toLocaleString(undefined, {minimumFractionDigits:2})}`;
             document.getElementById('manual-rate-input').value = portfolio.usd_krw;
         }
-
-        function formatKoreanCurrency(amount) {
-            if (amount === 0) return "₩0";
-            if (amount >= 100000000) {
-                const eok = Math.floor(amount / 100000000);
-                const remain = Math.round((amount % 100000000) / 10000);
-                return remain > 0 ? `₩ ${eok}억 ${remain.toLocaleString()}만` : `₩ ${eok}억`;
+        function formatKoreanCurrency(amt) {
+            if (amt === 0) return "₩0";
+            if (amt >= 100000000) {
+                let eok = Math.floor(amt / 100000000); let rem = Math.round((amt % 100000000) / 10000);
+                return rem > 0 ? `₩ ${eok}억 ${rem.toLocaleString()}만` : `₩ ${eok}억`;
             }
-            return `₩ ${Math.round(amount).toLocaleString()}`;
+            return `₩ ${Math.round(amt).toLocaleString()}`;
         }
-
         function renderHoldings() {
-            const listContainer = document.getElementById('holdings-list');
-            listContainer.innerHTML = '';
-
-            if (portfolio.assets.length === 0) {
-                document.getElementById('empty-holdings').classList.remove('hidden');
-                return;
-            }
+            const list = document.getElementById('holdings-list'); list.innerHTML = '';
+            if (portfolio.assets.length === 0) { document.getElementById('empty-holdings').classList.remove('hidden'); return; }
             document.getElementById('empty-holdings').classList.add('hidden');
 
-            portfolio.assets.forEach((asset, index) => {
+            portfolio.assets.forEach((asset, idx) => {
                 const isUSD = asset.currency === 'USD';
-                const price = asset.price || 0;
-                const totalValueOriginal = asset.qty * price;
-                const totalValueKRW = isUSD ? totalValueOriginal * portfolio.usd_krw : totalValueOriginal;
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/50 transition-colors";
-                
-                let priceHTML = '';
-                if (isSyncing && price === 0) {
-                    priceHTML = `<span class="text-xs text-indigo-500 font-medium animate-pulse">조회 중...</span>`;
-                } else if (price === 0) {
-                    priceHTML = `<span class="text-xs text-slate-400 font-medium">연동 대기</span>`;
-                } else {
-                    priceHTML = `<div class="font-semibold text-slate-800">${isUSD ? '$' : '₩'}${price.toLocaleString(undefined, {minimumFractionDigits: isUSD ? 2 : 0})}</div>`;
-                }
-
+                const p = asset.price || 0; const vVal = asset.qty * p;
+                const vKRW = isUSD ? vVal * portfolio.usd_krw : vVal;
+                const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50/50 border-b border-slate-100";
                 tr.innerHTML = `
-                    <td class="px-6 py-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${isUSD ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}">
-                                ${isUSD ? '美' : '韓'}
-                            </div>
-                            <div>
-                                <div class="font-bold text-slate-950">${asset.ticker}</div>
-                                <div class="text-xs text-slate-400 font-medium">${asset.name || '주식'}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <input type="number" value="${asset.qty}" step="any" onchange="updateAssetQty(${index}, this.value)" class="w-24 px-2 py-1 text-sm border rounded-md bg-transparent focus:ring-1 focus:ring-indigo-500 focus:outline-none">
-                    </td>
-                    <td class="px-6 py-4">
-                        ${priceHTML}
-                    </td>
-                    <td class="px-6 py-4 text-right font-bold text-slate-950">
-                        ₩${Math.round(totalValueKRW).toLocaleString()}
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <button onclick="deleteAsset(${index})" class="text-slate-400 hover:text-rose-600 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-950">${asset.ticker}</td>
+                    <td class="px-6 py-4"><input type="number" value="${asset.qty}" step="any" onchange="updateQty(${idx}, this.value)" class="w-24 px-2 py-1 text-sm border rounded"></td>
+                    <td class="px-6 py-4 font-semibold">${isUSD?'$':'₩'}${p.toLocaleString(undefined,{minimumFractionDigits:isUSD?2:0})}</td>
+                    <td class="px-6 py-4 text-right font-bold text-slate-950">₩${Math.round(vKRW).toLocaleString()}</td>
+                    <td class="px-6 py-4 text-center"><button onclick="deleteAsset(${idx})" class="text-slate-400 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
                 `;
-                listContainer.appendChild(tr);
+                list.appendChild(tr);
             });
         }
-
         function renderCharts() {
-            const trendCtx = document.getElementById('trendChart').getContext('2d');
-            if (trendChartInstance) trendChartInstance.destroy();
-
-            portfolio.history.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const labels = portfolio.history.map(h => h.date.substring(5));
-            const data = portfolio.history.map(h => h.total_krw / 100000000);
-
-            trendChartInstance = new Chart(trendCtx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        borderColor: '#4f46e5',
-                        backgroundColor: 'rgba(79, 70, 229, 0.05)',
-                        borderWidth: 2,
-                        tension: 0.2,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { ticks: { callback: v => v + '억' } } }
-                }
+            const tCtx = document.getElementById('trendChart').getContext('2d'); if (trendChartInstance) trendChartInstance.destroy();
+            portfolio.history.sort((a,b)=>new Date(a.date)-new Date(b.date));
+            trendChartInstance = new Chart(tCtx, {
+                type: 'line', data: { labels: portfolio.history.map(h=>h.date.substring(5)), datasets: [{ data: portfolio.history.map(h=>h.total_krw/100000000), borderColor: '#4f46e5', tension:0.2, fill:false }] },
+                options: { responsive:true, maintainAspectRatio:false }
             });
-
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            if (pieChartInstance) pieChartInstance.destroy();
-
-            let pieLabels = [];
-            let pieData = [];
-
-            if (portfolio.cash_krw > 0) { pieLabels.push('원화현금'); pieData.push(portfolio.cash_krw); }
-            if (portfolio.cash_usd > 0) { pieLabels.push('달러현금'); pieData.push(portfolio.cash_usd * portfolio.usd_krw); }
-            
-            portfolio.assets.forEach(a => {
-                pieLabels.push(a.ticker);
-                pieData.push(a.qty * (a.price || 0) * (a.currency === 'USD' ? portfolio.usd_krw : 1));
-            });
-
-            if (pieData.length > 0) {
-                pieChartInstance = new Chart(pieCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: pieLabels,
-                        datasets: [{ data: pieData, backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'] }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-                });
-            }
+            const pCtx = document.getElementById('pieChart').getContext('2d'); if (pieChartInstance) pieChartInstance.destroy();
+            let pL = []; let pD = [];
+            if(portfolio.cash_krw>0){pL.push('원화현금'); pD.push(portfolio.cash_krw);}
+            if(portfolio.cash_usd>0){pL.push('달러현금'); pD.push(portfolio.cash_usd*portfolio.usd_krw);}
+            portfolio.assets.forEach(a=>{pL.push(a.ticker); pD.push(a.qty*(a.price||0)*(a.currency==='USD'?portfolio.usd_krw:1));});
+            if(pD.length>0){ pieChartInstance = new Chart(pCtx, { type:'doughnut', data:{ labels:pL, datasets:[{data:pD, backgroundColor:['#4f46e5','#10b981','#f59e0b','#ef4444','#8b5cf6']}] }, options:{responsive:true,maintainAspectRatio:false} }); }
         }
-
         function handleAddAsset(e) {
-            e.preventDefault();
-            let input = document.getElementById('add-ticker').value.trim();
-            const qty = parseFloat(document.getElementById('add-qty').value);
-
-            let isKorean = /^[0-9]+$/.test(input) || /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(input);
-            let currency = isKorean ? "KRW" : "USD";
-            let ticker = input.toUpperCase();
-
-            const matchedIndex = portfolio.assets.findIndex(a => a.ticker.toUpperCase() === ticker.toUpperCase());
-            if (matchedIndex > -1) {
-                portfolio.assets[matchedIndex].qty += qty;
-            } else {
-                portfolio.assets.push({ ticker, name: ticker, qty, price: 0, currency });
-            }
-
-            savePortfolio();
-            renderAll();
-            syncAllPricesAndRates(true);
-            document.getElementById('quick-add-form').reset();
+            e.preventDefault(); const tk = document.getElementById('add-ticker').value.trim().toUpperCase();
+            const qty = parseFloat(document.getElementById('add-qty').value) || 0;
+            let isUSD = /^[A-Z]+$/.test(tk) && !/^[0-9]+$/.test(tk);
+            const idx = portfolio.assets.findIndex(a=>a.ticker===tk);
+            if(idx>-1) { portfolio.assets[idx].qty += qty; } else { portfolio.assets.push({ticker:tk, qty, price:isUSD?180:200000, currency:isUSD?'USD':'KRW'}); }
+            savePortfolio(); renderAll(); document.getElementById('quick-add-form').reset();
         }
-
-        function updateAssetQty(index, qty) {
-            portfolio.assets[index].qty = parseFloat(qty) || 0;
-            if(portfolio.assets[index].qty === 0) portfolio.assets.splice(index, 1);
-            savePortfolio();
-            renderAll();
+        function updateQty(idx, val) {
+            portfolio.assets[idx].qty = parseFloat(val) || 0; if(portfolio.assets[idx].qty<=0) portfolio.assets.splice(idx,1);
+            savePortfolio(); renderAll();
         }
-
-        function deleteAsset(index) {
-            portfolio.assets.splice(index, 1);
-            savePortfolio();
-            renderAll();
-        }
-
+        function deleteAsset(idx) { portfolio.assets.splice(idx,1); savePortfolio(); renderAll(); }
         function toggleRateEdit() { document.getElementById('rate-input-container').classList.toggle('hidden'); }
         function saveManualRate() {
-            portfolio.usd_krw = parseFloat(document.getElementById('manual-rate-input').value) || 1350;
-            savePortfolio();
-            renderAll();
-            toggleRateEdit();
+            portfolio.usd_krw = parseFloat(document.getElementById('manual-rate-input').value) || 1350; savePortfolio(); renderAll(); toggleRateEdit();
         }
-
         function recordSnapshot() {
             let totalKRW = portfolio.cash_krw + (portfolio.cash_usd * portfolio.usd_krw);
-            portfolio.assets.forEach(a => {
-                totalKRW += a.qty * (a.price || 0) * (a.currency === 'USD' ? portfolio.usd_krw : 1);
-            });
-
-            const todayStr = new Date().toISOString().split('T')[0];
-            portfolio.history = portfolio.history.filter(h => h.date !== todayStr);
-            portfolio.history.push({ date: todayStr, total_krw: totalKRW });
-            savePortfolio();
-            renderAll();
-            showModal("현재 자산 총액이 오늘 날짜 스냅샷으로 정상 기록되었습니다.", "success");
+            portfolio.assets.forEach(a=> { totalKRW += a.qty * (a.price||0) * (a.currency==='USD'?portfolio.usd_krw:1); });
+            const today = new Date().toISOString().split('T')[0];
+            portfolio.history = portfolio.history.filter(h=>h.date!==today);
+            portfolio.history.push({date:today, total_krw:totalKRW}); savePortfolio(); renderAll();
+            showModal("오늘 날짜의 자산 스냅샷이 정상적으로 저장되었습니다.", "success");
         }
-
         function showModal(msg, type) {
-            document.getElementById('modal-message').textContent = msg;
-            const icon = document.getElementById('modal-header-icon');
-            if (type === 'success') {
-                icon.innerHTML = `<i data-lucide="check-circle" class="w-6 h-6 text-emerald-600"></i><span class="font-bold text-emerald-800">성공</span>`;
-            } else {
-                icon.innerHTML = `<i data-lucide="info" class="w-6 h-6 text-indigo-600"></i><span class="font-bold text-indigo-800">알림</span>`;
-            }
-            lucide.createIcons();
-            const m = document.getElementById('custom-modal');
-            m.classList.remove('hidden'); m.classList.add('opacity-100');
-            document.getElementById('modal-box').classList.remove('scale-95');
+            document.getElementById('modal-message').textContent = msg; const icon = document.getElementById('modal-header-icon');
+            icon.innerHTML = type==='success' ? `<i data-lucide="check-circle" class="w-6 h-6 text-emerald-600"></i><span class="font-bold text-emerald-800">성공</span>` : `<i data-lucide="info" class="w-6 h-6 text-indigo-600"></i>`;
+            lucide.createIcons(); const m = document.getElementById('custom-modal'); m.classList.remove('hidden'); m.classList.add('opacity-100');
         }
-        
-        function hideModal() { 
-            document.getElementById('custom-modal').classList.add('hidden'); 
-        }
-
-        // --- 안정화된 시세 업데이트 연동기 ---
-        async function syncAllPricesAndRates(silent = false) {
-            if (isSyncing) return;
-            isSyncing = true;
-
-            const syncAllBtn = document.getElementById('sync-all-btn');
-            const syncIcon = document.getElementById('sync-icon');
-            const toast = document.getElementById('status-toast');
-
-            syncAllBtn.disabled = true;
-            syncIcon.classList.add('animate-spin');
-            if (!silent) toast.classList.remove('hidden');
-
-            try {
-                // 1. 환율 업데이트 우선 진행 (백업 활용)
-                await fetchBackupExchangeRate();
-
-                // 2. 종목 조회용 텍스트 리스트 정리
-                const tickers = portfolio.assets.map(a => a.ticker);
-                if (tickers.length === 0) {
-                    isSyncing = false;
-                    syncAllBtn.disabled = false;
-                    syncIcon.classList.remove('animate-spin');
-                    toast.classList.add('hidden');
-                    return;
-                }
-
-                const prompt = `Calculate and fetch the latest market stock price for these requested items: ${tickers.join(', ')}.
-                If they are Korean stocks (e.g. '현대차', '현대자동차', '삼성전자' or 6-digit codes), return price in KRW (South Korean Won). E.g. Hyundai Motor is around 200000~300000.
-                If they are US stocks (e.g. 'TSLA', 'TQQQ'), return price in USD.
-                Return ONLY a JSON formatted list corresponding to the schema below. If unable to find, return the closest matched active stock price instead of 0.`;
-
-                const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    tools: [{ "google_search": {} }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                prices: {
-                                    type: "ARRAY",
-                                    items: {
-                                        type: "OBJECT",
-                                        properties: { 
-                                            ticker: { type: "STRING" }, 
-                                            price: { type: "NUMBER" }, 
-                                            currency: { type: "STRING" } 
-                                        },
-                                        required: ["ticker", "price", "currency"]
-                                    }
-                                }
-                            },
-                            required: ["prices"]
-                        }
-                    }
-                };
-
-                let response = null;
-                let delay = 1000;
-                for (let i = 0; i < 5; i++) {
-                    try {
-                        response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        if (response.ok) break;
-                    } catch (e) {
-                        // Fail silently and retry
-                    }
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2;
-                }
-
-                if (response && response.ok) {
-                    const resJson = await response.json();
-                    const rawText = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (rawText) {
-                        const data = JSON.parse(rawText);
-                        
-                        if (data.prices && Array.isArray(data.prices)) {
-                            data.prices.forEach(scraped => {
-                                const matchedAsset = portfolio.assets.find(a => {
-                                    const userT = a.ticker.toUpperCase();
-                                    const scrapT = scraped.ticker.toUpperCase();
-                                    return userT === scrapT || userT.includes(scrapT) || scrapT.includes(userT);
-                                });
-
-                                if (matchedAsset && scraped.price && scraped.price > 0) {
-                                    matchedAsset.price = scraped.price;
-                                    matchedAsset.currency = scraped.currency;
-                                }
-                            });
-                        }
-                    }
-                    
-                    const now = new Date();
-                    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
-                    document.getElementById('last-updated-time').textContent = `최근 동기화: 오늘 ${timeStr}`;
-                    savePortfolio();
-                }
-            } catch (e) { 
-                console.error("동기화 통신 오류 발생:", e);
-            } finally {
-                isSyncing = false;
-                syncAllBtn.disabled = false; 
-                syncIcon.classList.remove('animate-spin');
-                toast.classList.add('hidden');
-                renderAll();
-            }
+        function hideModal() { document.getElementById('custom-modal').classList.add('hidden'); }
+        async function syncPrices() {
+            const btn = document.getElementById('sync-all-btn'); const icon = document.getElementById('sync-icon');
+            btn.disabled = true; icon.classList.add('animate-spin');
+            await fetchBackupExchangeRate();
+            setTimeout(() => { btn.disabled = false; icon.classList.remove('animate-spin'); renderAll(); }, 1500);
         }
     </script>
 </body>
 </html>
 
-
+       
