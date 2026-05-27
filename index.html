@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -44,7 +44,7 @@
         <!-- Status Toast -->
         <div id="status-toast" class="hidden flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-200 rounded-lg bg-blue-50">
             <i data-lucide="info" class="flex-shrink-0 inline w-4 h-4 mr-3 animate-pulse"></i>
-            <div id="status-toast-text" class="font-medium">구글 검색을 통해 실시간 시세 및 환율 정보를 분석 중입니다... (약 3~7초 소요)</div>
+            <div id="status-toast-text" class="font-medium">구글 검색을 통해 실시간 시세 및 환율 정보를 수집 중입니다... (약 3~5초 소요)</div>
         </div>
 
         <!-- Dashboard Summary -->
@@ -69,14 +69,14 @@
                         <span id="rate-badge" class="px-2 py-0.5 text-[10px] bg-slate-100 text-slate-600 rounded-full font-bold">조회 중...</span>
                     </div>
                     <div class="mt-2 flex items-center space-x-2">
-                        <span class="text-2xl font-bold text-slate-900" id="display-usd-krw">₩1,350.00</span>
+                        <span class="text-2xl font-bold text-slate-900" id="display-usd-krw">₩1,497.31</span>
                         <button id="edit-rate-btn" class="text-slate-400 hover:text-slate-600">
                             <i data-lucide="edit-3" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
                 <div id="rate-input-container" class="hidden mt-2 flex items-center space-x-2">
-                    <input type="number" id="manual-rate-input" class="w-24 px-2 py-1 text-sm border rounded-md focus:outline-none" step="0.1" value="1350">
+                    <input type="number" id="manual-rate-input" class="w-24 px-2 py-1 text-sm border rounded-md focus:outline-none" step="0.1" value="1497.31">
                     <button id="save-rate-btn" class="px-2 py-1 bg-slate-800 text-white text-xs rounded-md">적용</button>
                     <button id="cancel-rate-btn" class="text-xs text-slate-500">취소</button>
                 </div>
@@ -147,7 +147,7 @@
                         <tr class="bg-slate-50/75 border-b border-slate-100 text-xs font-bold text-slate-500 uppercase tracking-wider">
                             <th class="px-6 py-4">자산/티커</th>
                             <th class="px-6 py-4">보유 수량</th>
-                            <th class="px-6 py-4">현재가 (터치해서 수정 가능)</th>
+                            <th class="px-6 py-4">현재가 (직접 터치해서 즉시 수정 가능)</th>
                             <th class="px-6 py-4 text-right">평가금액</th>
                             <th class="px-6 py-4 text-center">관리</th>
                         </tr>
@@ -173,10 +173,22 @@
     </div>
 
     <script>
-        const apiKey = "AIzaSyCe3IHrekF0DsGeZmABTuYbY2D4eAqwdss"; // Runtime automatically provisions key
+        // 발급받으신 Gemini API 키를 여기에 대입해두었습니다.
+        const apiKey = "AIzaSyD-LzS6qwdss"; // your API key
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'financial-asset-tracker';
 
-        let portfolio = { usd_krw: 1350.00, cash_krw: 0, cash_usd: 0, assets: [], history: [] };
+        let portfolio = { 
+            usd_krw: 1497.31, 
+            cash_krw: 0, 
+            cash_usd: 0, 
+            assets: [
+                { ticker: 'TSLA', qty: 658, price: 439.00, currency: 'USD' },
+                { ticker: 'TQQQ', qty: 893, price: 81.30, currency: 'USD' },
+                { ticker: '현대차', qty: 28, price: 681000, currency: 'KRW' }
+            ], 
+            history: [] 
+        };
+        
         let trendChartInstance = null; let pieChartInstance = null; let isSyncing = false;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -197,8 +209,8 @@
             document.getElementById('cash-usd-input').value = portfolio.cash_usd || 0;
 
             renderAll();
-
-            // 백업용 고속 환율 로드 후 전체 자산 자동 동기화 구동
+            
+            // 고속 백업 환율 구동 후 자동 실시간 매칭 동기화
             fetchBackupExchangeRate().then(() => {
                 renderAll();
                 setTimeout(() => { syncPrices(true); }, 500);
@@ -218,9 +230,9 @@
         function getPastDate(daysAgo) {
             const d = new Date(); d.setDate(d.getDate() - daysAgo); return d.toISOString().split('T')[0];
         }
-        function savePortfolio() { localStorage.setItem('midas_portfolio_data_v3', JSON.stringify(portfolio)); }
+        function savePortfolio() { localStorage.setItem('midas_portfolio_data_v4', JSON.stringify(portfolio)); }
         function loadPortfolio() {
-            const saved = localStorage.getItem('midas_portfolio_data_v3');
+            const saved = localStorage.getItem('midas_portfolio_data_v4');
             if (saved) { try { portfolio = JSON.parse(saved); } catch(e){} }
         }
         async function fetchBackupExchangeRate() {
@@ -243,6 +255,7 @@
             savePortfolio(); renderSummary(); renderCharts();
         }
         function renderAll() { renderSummary(); renderHoldings(); renderCharts(); lucide.createIcons(); }
+        
         function renderSummary() {
             let totalKRW = portfolio.cash_krw + (portfolio.cash_usd * portfolio.usd_krw);
             portfolio.assets.forEach(a => {
@@ -253,6 +266,7 @@
             document.getElementById('display-usd-krw').textContent = `₩${portfolio.usd_krw.toLocaleString(undefined, {minimumFractionDigits:2})}`;
             document.getElementById('manual-rate-input').value = portfolio.usd_krw;
         }
+        
         function formatKoreanCurrency(amt) {
             if (amt === 0) return "₩0";
             if (amt >= 100000000) {
@@ -274,7 +288,6 @@
                 
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50/50 border-b border-slate-100 transition-colors";
                 
-                // 현재가를 인라인 인풋과 연필 아이콘으로 디자인하여 직접 수정할 수 있게 변경
                 tr.innerHTML = `
                     <td class="px-6 py-4 font-bold text-slate-900">${asset.ticker}</td>
                     <td class="px-6 py-4">
@@ -282,9 +295,9 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center space-x-2">
-                            <span class="text-slate-500 text-xs font-semibold">${isUSD ? '$' : '₩'}</span>
-                            <input type="number" value="${p}" step="any" onchange="updateAssetPrice(${idx}, this.value)" class="w-28 px-1.5 py-0.5 text-sm font-semibold border-b border-dashed hover:border-indigo-500 focus:border-indigo-500 focus:outline-none bg-transparent">
-                            <i data-lucide="edit-2" class="w-3 h-3 text-slate-300"></i>
+                            <span class="text-slate-500 text-sm font-semibold">${isUSD ? '$' : '₩'}</span>
+                            <input type="number" value="${p}" step="any" onchange="updateAssetPrice(${idx}, this.value)" class="w-28 px-2 py-1 text-sm font-bold border rounded focus:ring-1 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400"></i>
                         </div>
                     </td>
                     <td class="px-6 py-4 text-right font-bold text-slate-950">₩${Math.round(vKRW).toLocaleString()}</td>
@@ -319,7 +332,7 @@
             const idx = portfolio.assets.findIndex(a=>a.ticker===tk);
             if(idx>-1) { portfolio.assets[idx].qty += qty; } else { portfolio.assets.push({ticker:tk, qty, price:isUSD?180:200000, currency:isUSD?'USD':'KRW'}); }
             savePortfolio(); renderAll(); document.getElementById('quick-add-form').reset();
-            syncPrices(true); // 추가 시 실시간 업데이트 시도
+            syncPrices(true); 
         }
 
         function updateQty(idx, val) {
@@ -352,7 +365,6 @@
         }
         function hideModal() { document.getElementById('custom-modal').classList.add('hidden'); }
 
-        // --- 진짜 실시간 인공지능(Gemini 2.5 Flash) 시세 크롤러 ---
         async function syncPrices(silent = false) {
             if (isSyncing) return;
             isSyncing = true;
@@ -364,7 +376,6 @@
             if(!silent) toast.classList.remove('hidden');
 
             try {
-                // 백업용 초고속 환율 로드 선행
                 await fetchBackupExchangeRate();
 
                 const tickers = portfolio.assets.map(a => a.ticker);
@@ -373,11 +384,11 @@
                     toast.classList.add('hidden'); return;
                 }
 
-                // 구글 실시간 검색 Grounding 기술을 사용하여 정확한 주가 크롤링 지시
-                const prompt = `Fetch and return the current single stock price for these tickers: ${tickers.join(', ')}. 
-                For Korean stocks (or Korean names like '현대차', '삼성전자' etc.), return price in KRW (South Korean Won). 
-                For US stocks (TSLA, TQQQ, SOXL, NVDA), return price in USD. 
-                Match the output EXACTLY to the provided JSON structure. If you can't find a price, return its current real-world estimated trading price. Do not return 0.`;
+                // 구글 실시간 검색 연동 및 안정적인 JSON 파싱 지침
+                const prompt = `Find the exact current stock price for these tickers: ${tickers.join(', ')}. 
+                For Korean stocks/names (e.g. 현대차), return price in KRW.
+                For US tickers (TSLA, TQQQ), return price in USD.
+                Return ONLY a JSON block matches the specified schema. Keep 'price' as close to real-world trading prices as possible.`;
 
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
@@ -427,10 +438,11 @@
                         const data = JSON.parse(rawText);
                         if (data.prices && Array.isArray(data.prices)) {
                             data.prices.forEach(scraped => {
+                                // 대소문자 및 텍스트 일치 여부 정합성 보강 매칭 알고리즘
                                 const matchedAsset = portfolio.assets.find(a => {
-                                    const userT = a.ticker.toUpperCase();
-                                    const scrapT = scraped.ticker.toUpperCase();
-                                    return userT === scrapT || userT.includes(scrapT) || scrapT.includes(userT);
+                                    const aName = a.ticker.toUpperCase().trim();
+                                    const sName = scraped.ticker.toUpperCase().trim();
+                                    return aName === sName || aName.includes(sName) || sName.includes(aName);
                                 });
                                 if (matchedAsset && scraped.price > 0) {
                                     matchedAsset.price = scraped.price;
@@ -455,4 +467,4 @@
 </body>
 </html>
 
-
+```
